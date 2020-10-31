@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smart.mybatis.mapper.RolesMapper">
+    <resultMap id="BaseResultMap" type="com.smart.mybatis.entity.Roles">
+        <id column="role_id" jdbcType="INTEGER" property="roleId"/>
+        <result column="role_name" jdbcType="VARCHAR" property="roleName"/>
+        <result column="dec" jdbcType="VARCHAR" property="dec"/>
+        <result column="is_del" jdbcType="INTEGER" property="isDel"/>
+    </resultMap>
+
+    <resultMap id="CollectionResultMap" type="com.smart.mybatis.entity.Roles" extends="BaseResultMap">
+        <collection property="privileges" resultMap="com.smart.mybatis.mapper.PrivilegeMapper.BaseResultMap"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        role_id,
+        role_name,
+        `dec`,
+        is_del
+    </sql>
+    <select id="selectById" resultMap="BaseResultMap">
+    </select>
+    <select id="selectByUserId" resultMap="CollectionResultMap">
+        SELECT *
+        FROM roles r
+                     LEFT JOIN roles_privilege_relation rpr ON r.role_id = rpr.role_id
+                     LEFT JOIN privilege p ON rpr.privilege_id = p.privilege_id
+        WHERE user_id = #{userId}
+    </select>
+</mapper>

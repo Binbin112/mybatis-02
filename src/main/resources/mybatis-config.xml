@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <!--    了解-->
+    <!--    url="从网络上加载配置文件" -->
+    <properties resource="db.properties"/>
+
+    <settings>
+        <!--       指定第三方日志的框架 -->
+        <!--      开启一级缓存  -->
+        <setting name="cacheEnabled" value="true"/>
+        <!--        <setting name="logImpl" value=""/>-->
+        <!--        开启延迟加载数据-->
+        <setting name="lazyLoadingEnabled" value="true"/>
+        <!--        开启立即加载-->
+        <setting name="aggressiveLazyLoading" value="false"/>
+        <!--        开启驼峰命名映射-->
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+    </settings>
+
+    <typeAliases>
+        <!--   设置类的前缀-->
+        <package name="com.smart.mybatis.entity"/>
+    </typeAliases>
+    <!--    EJB java提出来的企业开发标准 -->
+    <environments default="dev">
+        <environment id="dev">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+                <property name="driver" value="${db.driverClass}"/>
+                <property name="url" value="${db.url}"/>
+                <property name="username" value="${db.username}"/>
+                <property name="password" value="${db.password}"/>
+            </dataSource>
+        </environment>
+    </environments>
+    <mappers>
+        <mapper resource="mapper/UserMapper.xml"/>
+        <mapper resource="mapper/OrderMapper.xml"/>
+        <mapper resource="mapper/OrderItemMapper.xml"/>
+        <mapper resource="mapper/PrivilegeMapper.xml"/>
+        <mapper resource="mapper/RolesMapper.xml"/>
+    </mappers>
+</configuration>
+

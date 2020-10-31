@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.smart.mybatis.mapper.IfMapper">
+    <!--    <select id="selectUser">-->
+    <!--        &#45;&#45;  根据手机号或者用户名或者邮箱查询用户信息-->
+    <!--                SELECT *-->
+    <!--                FROM user-->
+    <!--                WHERE-->
+    <!--        <if test="user.username != null">-->
+    <!--            username = #{user.username}-->
+    <!--        </if>-->
+    <!--        <if test="user.status != null">-->
+    <!--            and status = #{user.status}-->
+    <!--        </if>-->
+    <!--        -->
+    <!--    </select>-->
+
+    <!--    <select id="selectUser">-->
+    <!--        SELECT *-->
+    <!--        FROM user-->
+    <!--        <where>-->
+    <!--            <if test="user.username != null">-->
+    <!--            </if>-->
+    <!--            <if test="user.status != null">-->
+    <!--                and status = #{user.status}-->
+    <!--            </if>-->
+    <!--        </where>-->
+    <!--    </select>-->
+    <!--        set 标签的使用 智能去掉末尾逗号-->
+    <!--    <update id="update">-->
+    <!--        UPDATE user-->
+    <!--        <set>-->
+    <!--            <if test="user.username != null">-->
+    <!--                username =#{user.username},-->
+    <!--            </if>-->
+    <!--            <if test="user.password != null">-->
+    <!--                password =#{user.password,jdbcType=VARCHAR}-->
+    <!--            </if>-->
+    <!--        </set>-->
+    <!--        WHERE user_id = #{user.userId,jdbcType=INTEGER}-->
+    <!--    </update>-->
+    <!--
+    prefix   来表示where   set
+
+
+    -->
+    <select id="selectUser">
+        SELECT *
+        FROM user
+        <trim prefix="WHERE" prefixOverrides="AND|OR">
+            <if test="user.username != null">
+                and username = #{user.username}
+            </if>
+            <if test="user.status != null">
+                AND status = #{user.status}
+            </if>
+        </trim>
+    </select>
+    <!--        prefix  set  ,-->
+
+    <update id="update">
+        UPDATE user
+        <trim prefix="SET" prefixOverrides=",">
+            <if test="user.username != null">
+                username = #{user.username},
+            </if>
+            <if test="user.password != null">
+                password =#{user.password}
+            </if>
+        </trim>
+        WHERE user_id = #{user.userId}
+    </update>
+
+    <insert id="batchUsers">
+        INSERT INTO user(username, password)
+                VALUES
+        <foreach collection="users" item="user" index="i" open="(" close=")" separator=",">
+            #{user.username},#{user.password}
+        </foreach>
+
+    </insert>
+</mapper>
